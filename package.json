@@ -3,6 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.13.7",
+    "@mui/material": "^5.13.7",
+    "@mui/styled-engine-sc": "^5.12.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -10,11 +14,16 @@
     "@types/node": "^16.18.38",
     "@types/react": "^18.2.14",
     "@types/react-dom": "^18.2.6",
+    "axios": "^1.4.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
+    "styled-components": "^5.3.11",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4"
+  },
+  "resolutions": {
+    "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -39,5 +48,14 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@craco/craco": "latest",
+    "@types/node": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "@types/styled-components": "latest",
+    "craco-alias": "^3.0.1",
+    "typescript": "latest"
   }
 }
