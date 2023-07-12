@@ -1,40 +1,24 @@
-import { Typography, ListItem, List, Divider, Container } from "@mui/material";
-
+import { useEffect, useState } from "react";
+import { List, Container } from "@mui/material";
+import NewsItem from "../newsItem/NewsItem";
+import { getStoryIds } from "../../hook/http.hook";
 export default function NewsList() {
+  const [storyIds, setStoryIds] = useState([]);
+
+  useEffect(() => {
+    getStoryIds().then((data) => setStoryIds(data));
+  }, []);
+
   return (
     <Container sx={{ pt: 15 }}>
       <List
         sx={{ width: "100%", bgcolor: "background.paper" }}
         component="nav"
-        aria-label="mailbox folders"
+        aria-label="news folder"
       >
-        <ListItem>
-          <Typography variant="h6" component="div" sx={{ fontWeight: "bold" }}>
-            Hacker News
-            <Typography variant="subtitle2" component="div">
-              1 point by mikece 0 minutes ago
-            </Typography>
-          </Typography>
-        </ListItem>
-        <Divider />
-        <ListItem>
-          <Typography variant="h6" component="div" sx={{ fontWeight: "bold" }}>
-            Hacker News
-            <Typography variant="subtitle2" component="div">
-              1 point by mikece 0 minutes ago
-            </Typography>
-          </Typography>
-        </ListItem>
-        <Divider light />
-        <ListItem>
-          <Typography variant="h6" component="div" sx={{ fontWeight: "bold" }}>
-            Hacker News
-            <Typography variant="subtitle2" component="div">
-              1 point by mikece 0 minutes ago
-            </Typography>
-          </Typography>
-        </ListItem>
-        <Divider light />
+        {storyIds.map((id) => (
+          <NewsItem key={id} id={id} />
+        ))}
       </List>
     </Container>
   );

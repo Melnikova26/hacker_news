@@ -16,15 +16,8 @@ const Header = () => {
               backgroundColor: "#BF8030",
             },
           }}
+          startIcon={<AutorenewIcon />}
         >
-          <IconButton
-            size="small"
-            edge="start"
-            color="inherit"
-            aria-label="update"
-          >
-            <AutorenewIcon />
-          </IconButton>
           Update
         </Button>
       </Toolbar>
