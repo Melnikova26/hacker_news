@@ -1,14 +1,20 @@
+import { Link } from "react-router-dom";
 import { AppBar, Toolbar, IconButton, Typography, Button } from "@mui/material";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
-
+import styled from "@mui/styled-engine-sc";
+const StyledLink = styled(Link)`
+  color: #fff;
+  text-decoration: none;
+`;
 const Header = () => {
   return (
-    <AppBar position="fixed" sx={{ backgroundColor: "#FFC173" }}>
+    <AppBar sx={{ backgroundColor: "#FFC173", zIndex: "1" }}>
       <Toolbar>
         <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
-          Hacker News
+          <StyledLink to="/">Hacker News</StyledLink>
         </Typography>
-        <Button
+
+        {/* <Button
           variant="contained"
           sx={{
             backgroundColor: "#A65C00",
@@ -19,7 +25,7 @@ const Header = () => {
           startIcon={<AutorenewIcon />}
         >
           Update
-        </Button>
+        </Button> */}
       </Toolbar>
     </AppBar>
   );

@@ -1,6 +1,15 @@
 import { useEffect, useState, useMemo } from "react";
+import { Link } from "react-router-dom";
 import { Typography, ListItem, Divider } from "@mui/material";
-import { getStory } from "../../hook/http.hook";
+import { getNews } from "../../hook/http.hook";
+import styled from "@mui/styled-engine-sc";
+const StyledLink = styled(Link)`
+  color: inherit;
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
+`;
 interface NewsIDProp {
   id: number;
 }
@@ -21,7 +30,7 @@ const NewsItem = ({ id }: NewsIDProp) => {
     url: "",
   });
   useEffect(() => {
-    getStory(id).then(({ data }) => data && data.url && setNewsItem(data));
+    getNews(id).then(({ data }) => data && data.url && setNewsItem(data));
   }, []);
 
   const { title, score, by, time, url } = newsItem;
@@ -58,15 +67,16 @@ const NewsItem = ({ id }: NewsIDProp) => {
     }
   };
 
-  const resultTime = useMemo(() => {
+  const resultTime = getTime(time);
+  useMemo(() => {
     return getTime(time);
-  }, [time]);
+  }, [newsItem]);
 
   return url ? (
     <>
       <ListItem>
-        <Typography variant="h6" component="div" sx={{ fontWeight: "bold" }}>
-          {title}
+        <Typography variant="h6" component="div" sx={{ fontWeight: "700" }}>
+          <StyledLink to={`/${id}`}>{title}</StyledLink>
           <Typography variant="subtitle2" component="div">
             {`${score} point by ${by} ${resultTime} ago`}
           </Typography>
