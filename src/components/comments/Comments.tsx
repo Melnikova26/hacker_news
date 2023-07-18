@@ -2,7 +2,9 @@ import { Typography, Button } from "@mui/material";
 import { useState, useEffect, useMemo } from "react";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import styled from "@mui/styled-engine-sc";
-import { getNews } from "../../hook/http.hook";
+import { useAppDispatch, useAppSelector } from "../../store/hooksTyped";
+import { fetchCommentItem } from "../../store/reducer";
+
 const CommentContainer = styled("div")`
   display: flex;
   flex-direction: column;
@@ -13,12 +15,6 @@ interface CommentIDProp {
   id: number;
   getTime: (arg: number) => string;
 }
-interface CommentItemData {
-  text: string;
-  by: string;
-  time: number;
-  kids: number[];
-}
 function Comments({ id, getTime }: CommentIDProp) {
   const CustomButton = styled(Button)`
     text-align: start;
@@ -26,15 +22,10 @@ function Comments({ id, getTime }: CommentIDProp) {
     background-color: #fff;
   `;
   const [expand, setExpand] = useState(false);
-  const [commentItem, setCommentItem] = useState<CommentItemData>({
-    text: "",
-    by: "",
-    time: 0,
-    kids: [],
-  });
+  const commentItem = useAppSelector((state) => state.newsIds.storyItem);
+  const dispatch = useAppDispatch();
   useEffect(() => {
-    getNews(id).then(({ data }) => data && setCommentItem(data));
-    console.log(commentItem);
+    dispatch(fetchCommentItem(id));
   }, []);
   const getExpand = () => {
     setExpand(!expand);
@@ -42,10 +33,10 @@ function Comments({ id, getTime }: CommentIDProp) {
   const RotateIcon = styled(ExpandLessIcon)`
     transform: ${expand ? "rotate(180deg)" : "rotate(0)"};
   `;
-  const { text, by, time, kids } = commentItem;
+  const { text, by, time, kids } = commentItem ?? {};
 
   const resultTime = useMemo(() => {
-    return getTime(time);
+    return getTime(time!);
   }, [time]);
   return (
     <CommentContainer>

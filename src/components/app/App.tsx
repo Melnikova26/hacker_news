@@ -5,7 +5,10 @@ import { Box } from "@mui/material";
 import { getNewsId, getNews } from "../../hook/http.hook";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import SingleNewsPage from "../singleNewsPage/SingleNewsPage";
-
+export enum Paths {
+  MAIN = "/",
+  NEWS_PAGE = "/:id",
+}
 function App() {
   const [storyIds, setStoryIds] = useState([]);
 
@@ -26,9 +29,10 @@ function App() {
         }}
       >
         <Header />
+
         <Routes>
-          <Route path="/" element={<NewsList />} />
-          <Route path="/:id" element={<SingleNewsPage />} />
+          <Route path={Paths.MAIN} element={<NewsList />} />
+          <Route path={Paths.NEWS_PAGE} element={<SingleNewsPage />} />
         </Routes>
       </Box>
     </Router>

@@ -3,21 +3,32 @@ import { List, Container, Button } from "@mui/material";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
 import NewsItem from "../newsItem/NewsItem";
 import { getNewsId, getNews } from "../../hook/http.hook";
-const NewsElement = NewsItem as unknown as React.JSXElementConstructor<{
-  id: number;
-}>;
-
+import { useAppSelector, useAppDispatch } from "../../store/hooksTyped";
+import { fetchNewsIds } from "../../store/reducer";
+import Spinner from "../spinner/Spinner";
+// const NewsElement = NewsItem as unknown as React.JSXElementConstructor<{
+//   id: number | string;
+// }>;
+interface NewsIdsState {
+  newsIds: number[] | string[];
+  newsLoadingStatus: "idle" | "loading" | "error";
+}
 export default function NewsList() {
-  const [newsId, setNewsId] = useState([]);
-
+  const loading = useAppSelector((state) => state.newsIds.newsLoadingStatus);
+  const newsIds = useAppSelector((state) => state.newsIds.newsIds);
+  const dispatch = useAppDispatch();
   useEffect(() => {
-    getNewsId().then((data) => setNewsId(data.slice(0, 100)));
-    setInterval(
-      () => getNewsId().then((data) => setNewsId(data.slice(0, 100))),
-      60000
-    );
+    dispatch(fetchNewsIds());
+    const intervalID = setInterval(() => dispatch(fetchNewsIds()), 60000);
+    return () => {
+      clearInterval(intervalID);
+    };
   }, []);
-
+  if (loading === "loading") {
+    return <Spinner />;
+  } else if (loading === "error") {
+    return <h5>Ошибка загрузки</h5>;
+  }
   return (
     <Container sx={{ pt: 15 }}>
       <Button
@@ -35,7 +46,7 @@ export default function NewsList() {
         }}
         startIcon={<AutorenewIcon />}
         onClick={() => {
-          getNewsId().then((data) => setNewsId(data.slice(0, 100)));
+          dispatch(fetchNewsIds());
         }}
       >
         Update News
@@ -45,8 +56,8 @@ export default function NewsList() {
         component="nav"
         aria-label="news folder"
       >
-        {newsId.map((id, i) => (
-          <NewsElement key={id} id={id} />
+        {newsIds.map((id) => (
+          <NewsItem key={id} id={id} />
         ))}
       </List>
     </Container>
