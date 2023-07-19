@@ -7,24 +7,42 @@ import Comments from "../comments/Comments";
 import { Paths } from "../app/App";
 import getTime from "../../utils/timeModify";
 import { useAppSelector, useAppDispatch } from "../../store/hooksTyped";
-import { fetchNewsItem } from "../../store/reducer";
-
+import { fetchNewsItems } from "../../store/reducer";
+import Spinner from "../spinner/Spinner";
 function SingleNewsPage() {
+  const [shouldUpdate, setShouldUpdate] = useState(false);
   const { id } = useParams<string>();
+  const newId = +id!;
+  const loading = useAppSelector((state) => state.newsIds.newsLoadingStatus);
+  const newsItem = useAppSelector((state) =>
+    state.newsIds.newsItems?.find((item) => item.id == newId)
+  );
   const dispatch = useAppDispatch();
-  const newsItem = useAppSelector((state) => state.newsIds.storyItem);
   useEffect(() => {
-    if (id) dispatch(fetchNewsItem(id));
+    dispatch(fetchNewsItems());
+    const IntervalId = setInterval(() => {
+      setShouldUpdate(true);
+      setShouldUpdate(false);
+    }, 6000);
+    return () => clearInterval(IntervalId);
   }, []);
+  useEffect(() => {
+    if (shouldUpdate) {
+      dispatch(fetchNewsItems());
+      setShouldUpdate(false);
+    }
+  }, [dispatch, setShouldUpdate]);
 
   const { title, by, time, url, descendants, kids } = newsItem ?? {};
 
-  const resultTime = useMemo(() => {
-    if (time) return getTime(time);
-  }, [time]);
-
+  const resultTime = getTime(time!);
+  if (loading === "loading") {
+    return <Spinner />;
+  } else if (loading === "error") {
+    return <h5>Ошибка загрузки</h5>;
+  }
   return (
-    <Container sx={{ pt: 15, backgroundColor: "#fff" }}>
+    <Container sx={{ pt: 5, backgroundColor: "#fff" }}>
       <Box display="flex" justifyContent="space-between">
         <Link to={Paths.MAIN}>
           <Button
@@ -41,7 +59,6 @@ function SingleNewsPage() {
             To main
           </Button>
         </Link>
-
         <Button
           variant="contained"
           sx={{
@@ -50,15 +67,13 @@ function SingleNewsPage() {
             right: "100px",
             top: "0",
             transform: "translateY(40%)",
-            zIndex: "5",
+            zIndex: "8",
             "&:hover": {
               backgroundColor: "#BF8030",
             },
           }}
           startIcon={<AutorenewIcon />}
-          onClick={() => {
-            if (id) dispatch(fetchNewsItem(id));
-          }}
+          onClick={() => setShouldUpdate(true)}
         >
           Update Comments
         </Button>

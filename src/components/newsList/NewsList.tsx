@@ -2,35 +2,43 @@ import { useEffect, useState } from "react";
 import { List, Container, Button } from "@mui/material";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
 import NewsItem from "../newsItem/NewsItem";
-import { getNewsId, getNews } from "../../hook/http.hook";
 import { useAppSelector, useAppDispatch } from "../../store/hooksTyped";
-import { fetchNewsIds } from "../../store/reducer";
+import { fetchNewsItems } from "../../store/reducer";
 import Spinner from "../spinner/Spinner";
-// const NewsElement = NewsItem as unknown as React.JSXElementConstructor<{
-//   id: number | string;
-// }>;
-interface NewsIdsState {
-  newsIds: number[] | string[];
-  newsLoadingStatus: "idle" | "loading" | "error";
-}
+const NewsElement = NewsItem as unknown as React.JSXElementConstructor<{
+  id: number | string;
+}>;
+
 export default function NewsList() {
   const loading = useAppSelector((state) => state.newsIds.newsLoadingStatus);
-  const newsIds = useAppSelector((state) => state.newsIds.newsIds);
+  const [shouldUpdate, setShouldUpdate] = useState(false);
+  const newsItems = useAppSelector((state) => state.newsIds.newsItems);
+
   const dispatch = useAppDispatch();
+
   useEffect(() => {
-    dispatch(fetchNewsIds());
-    const intervalID = setInterval(() => dispatch(fetchNewsIds()), 60000);
-    return () => {
-      clearInterval(intervalID);
-    };
-  }, []);
+    if (shouldUpdate) {
+      dispatch(fetchNewsItems());
+      setShouldUpdate(false);
+    }
+    const IntervalId = setInterval(() => {
+      setShouldUpdate(true);
+      setShouldUpdate(false);
+    }, 6000);
+    return () => clearInterval(IntervalId);
+  }, [dispatch, shouldUpdate]);
+
+  useEffect(() => {
+    dispatch(fetchNewsItems());
+  }, [dispatch]);
+
   if (loading === "loading") {
     return <Spinner />;
   } else if (loading === "error") {
     return <h5>Ошибка загрузки</h5>;
   }
   return (
-    <Container sx={{ pt: 15 }}>
+    <Container sx={{ pt: 5 }}>
       <Button
         variant="contained"
         sx={{
@@ -45,9 +53,7 @@ export default function NewsList() {
           },
         }}
         startIcon={<AutorenewIcon />}
-        onClick={() => {
-          dispatch(fetchNewsIds());
-        }}
+        onClick={() => setShouldUpdate(true)}
       >
         Update News
       </Button>
@@ -56,8 +62,8 @@ export default function NewsList() {
         component="nav"
         aria-label="news folder"
       >
-        {newsIds.map((id) => (
-          <NewsItem key={id} id={id} />
+        {newsItems.map((item) => (
+          <NewsElement key={item.id} id={item.id} />
         ))}
       </List>
     </Container>

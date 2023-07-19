@@ -1,26 +1,19 @@
 import axios from "axios";
+import { Paths } from "../components/app/App";
 
-export const _apiBase = "https://hacker-news.firebaseio.com/v0/";
-export const _baseOffset = 100;
-const enum Methods {
-  GET = "GET",
-  POST = "POST",
-  DELETE = "DELETE",
-  PUT = "PUT",
-}
-export const getNews = async (newsId: string | number) => {
+export const getComments = async (newsId: number) => {
   try {
-    const result = await axios.get(`${_apiBase}item/${newsId}.json`);
-    return result;
+    const result = await axios.get(`http://localhost:8000/api/${newsId}`);
+    return result.data.data.story;
   } catch (error) {
     console.error("Ошибка при получении данных:", error);
     throw error;
   }
 };
-export const getNewsId = async () => {
+export const getNewsItems = async () => {
   try {
-    const result = await axios.get(`${_apiBase}newstories.json`);
-    return result.data;
+    const result = await axios.get(`http://localhost:8000/api${Paths.MAIN}`);
+    return result.data.data;
   } catch (error) {
     console.error("Ошибка при получении данных:", error);
     throw error;

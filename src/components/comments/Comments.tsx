@@ -15,14 +15,18 @@ interface CommentIDProp {
   id: number;
   getTime: (arg: number) => string;
 }
+
+const CustomButton = styled(Button)`
+  text-align: start;
+  text-transform: none;
+  background-color: #fff;
+`;
+
 function Comments({ id, getTime }: CommentIDProp) {
-  const CustomButton = styled(Button)`
-    text-align: start;
-    text-transform: none;
-    background-color: #fff;
-  `;
   const [expand, setExpand] = useState(false);
-  const commentItem = useAppSelector((state) => state.newsIds.storyItem);
+  const commentItem = useAppSelector((state) =>
+    state.newsIds.comments?.find((item) => item.id === id)
+  );
   const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(fetchCommentItem(id));

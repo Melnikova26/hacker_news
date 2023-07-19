@@ -1,7 +1,8 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { getNewsId, getNews } from "../hook/http.hook";
+import { getNewsItems, getComments } from "../hook/http.hook";
 
 interface Story {
+  id: number;
   title: string;
   by: string;
   time: number;
@@ -13,50 +14,30 @@ interface Story {
 }
 
 interface INewsState {
-  newsIds: string[];
+  newsItems: Story[];
   newsLoadingStatus: "idle" | "loading" | "error";
-  story?: Story[];
-  storyItem?: Story;
+  comments?: Story[];
 }
 
 const initialState: INewsState = {
-  newsIds: [],
+  newsItems: [],
   newsLoadingStatus: "idle",
-  story: [],
-  storyItem: {
-    title: "",
-    by: "",
-    time: 0,
-    url: "",
-    descendants: 0,
-    kids: [],
-    score: 0,
-    text: "",
-  },
+  comments: [],
 };
 
-export const fetchNewsIds = createAsyncThunk<string[], undefined>(
+export const fetchNewsItems = createAsyncThunk<Story[], undefined>(
   "newsIds/fetchNewsIds",
   async () => {
-    return await getNewsId();
+    return (await getNewsItems()) as unknown as Story[];
   }
 );
 
-export const fetchNewsItem = createAsyncThunk<Story, string | number>(
-  "newsIds/fetchNewsItem",
-
-  async (id) => {
-    const newsResponse = await getNews(id);
-    return newsResponse.data as Story;
-  }
-);
-
-export const fetchCommentItem = createAsyncThunk<Story[], string | number>(
+export const fetchCommentItem = createAsyncThunk<Story, number>(
   "newsIds/fetchCommentItem",
 
   async (id) => {
-    const commentResponse = await getNews(id);
-    return commentResponse.data as Story[];
+    const commentResponse = await getComments(id);
+    return commentResponse as Story;
   }
 );
 
@@ -66,33 +47,24 @@ export const newsIdsSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchNewsIds.pending, (state) => {
+      .addCase(fetchNewsItems.pending, (state) => {
         state.newsLoadingStatus = "loading";
       })
-      .addCase(fetchNewsIds.fulfilled, (state, action) => {
+      .addCase(fetchNewsItems.fulfilled, (state, action) => {
         state.newsLoadingStatus = "idle";
-        state.newsIds = action.payload;
+        state.newsItems = action.payload;
       })
-      .addCase(fetchNewsIds.rejected, (state) => {
-        state.newsLoadingStatus = "error";
-      })
-      .addCase(fetchNewsItem.pending, (state) => {
-        state.newsLoadingStatus = "loading";
-      })
-      .addCase(fetchNewsItem.fulfilled, (state, action) => {
-        state.newsLoadingStatus = "idle";
-        state.storyItem = action.payload;
-      })
-      .addCase(fetchNewsItem.rejected, (state) => {
+      .addCase(fetchNewsItems.rejected, (state) => {
         state.newsLoadingStatus = "error";
       })
       .addCase(fetchCommentItem.fulfilled, (state, action) => {
         state.newsLoadingStatus = "idle";
-        state.story = action.payload;
+        state.comments?.push(action.payload);
       })
       .addCase(fetchCommentItem.rejected, (state) => {
         state.newsLoadingStatus = "error";
-      });
+      })
+      .addDefaultCase(() => {});
   },
 });
 
