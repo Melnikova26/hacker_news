@@ -38,7 +38,7 @@ export default function NewsList() {
     return <h5>Ошибка загрузки</h5>;
   }
   return (
-    <Container sx={{ pt: 5 }}>
+    <Container sx={{ pt: 5, pb: 15 }}>
       <Button
         variant="contained"
         sx={{
