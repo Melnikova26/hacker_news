@@ -3,7 +3,6 @@ import NewsList from "../newsList/NewsList";
 import { Box } from "@mui/material";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import SingleNewsPage from "../singleNewsPage/SingleNewsPage";
-import { useEffect } from "react";
 export enum Paths {
   MAIN = "/",
   NEWS_PAGE = "/:id",

@@ -1,4 +1,4 @@
-build
-node_modules
-server
+/frontend/build
+/frontend/node_modules
+server/node_modules
  
