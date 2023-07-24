@@ -24,7 +24,7 @@ export default function NewsList() {
     const IntervalId = setInterval(() => {
       setShouldUpdate(true);
       setShouldUpdate(false);
-    }, 6000);
+    }, 60000);
     return () => clearInterval(IntervalId);
   }, [dispatch, shouldUpdate]);
 
@@ -38,7 +38,7 @@ export default function NewsList() {
     return <h5>Ошибка загрузки</h5>;
   }
   return (
-    <Container sx={{ pt: 5, pb: 15 }}>
+    <Container sx={{ pt: 5, pb: 10 }}>
       <Button
         variant="contained"
         sx={{

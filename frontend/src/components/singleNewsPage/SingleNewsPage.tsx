@@ -23,7 +23,7 @@ function SingleNewsPage() {
     const IntervalId = setInterval(() => {
       setShouldUpdate(true);
       setShouldUpdate(false);
-    }, 6000);
+    }, 60000);
     return () => clearInterval(IntervalId);
   }, []);
   useEffect(() => {
