@@ -1,4 +1,4 @@
-import { Typography, Button } from "@mui/material";
+import { Typography, Button, SvgIconProps, SvgIcon } from "@mui/material";
 import { useState, useEffect, useMemo } from "react";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import styled from "@mui/styled-engine-sc";
@@ -22,31 +22,35 @@ const CustomButton = styled(Button)`
   background-color: #fff;
 `;
 
-function Comments({ id, getTime }: CommentIDProp) {
-  const [expand, setExpand] = useState(false);
+const RotateIcon = styled(ExpandLessIcon)<{ expand: string }>`
+  transform: ${({ expand }) =>
+    expand === "true" ? "rotate(180deg)" : "rotate(0)"};
+`;
+
+const Comments = ({ id, getTime }: CommentIDProp) => {
+  const [isExpand, setIsExpand] = useState<boolean>(false);
+
   const commentItem = useAppSelector((state) =>
     state.newsIds.comments?.find((item) => item.id === id)
   );
   const dispatch = useAppDispatch();
+
   useEffect(() => {
     dispatch(fetchCommentItem(id));
   }, []);
-  const getExpand = () => {
-    setExpand(!expand);
+
+  const toggleExpand = () => {
+    setIsExpand(!isExpand);
   };
-  const RotateIcon = styled(ExpandLessIcon)`
-    transform: ${expand ? "rotate(180deg)" : "rotate(0)"};
-  `;
+
   const { text, by, time, kids } = commentItem ?? {};
 
-  const resultTime = useMemo(() => {
-    return getTime(time!);
-  }, [time]);
+  const resultTime = getTime(time!);
   return (
     <CommentContainer>
       <CustomButton
         color="inherit"
-        startIcon={<RotateIcon />}
+        startIcon={<RotateIcon expand={isExpand ? "true" : "false"} />}
         sx={{
           width: "98%",
           mt: 2,
@@ -54,7 +58,7 @@ function Comments({ id, getTime }: CommentIDProp) {
           display: "flex",
           justifyContent: "start",
         }}
-        onClick={getExpand}
+        onClick={toggleExpand}
       >
         <Typography variant="caption" component="div">
           {by} {resultTime} ago.
@@ -63,12 +67,12 @@ function Comments({ id, getTime }: CommentIDProp) {
           </Typography>
         </Typography>
       </CustomButton>
-      {expand && kids
+      {isExpand && kids
         ? kids.map((id) => {
             return <Comments key={id} id={id} getTime={getTime} />;
           })
         : null}
     </CommentContainer>
   );
-}
+};
 export default Comments;

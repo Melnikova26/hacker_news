@@ -3,11 +3,13 @@ import NewsList from "../newsList/NewsList";
 import { Box } from "@mui/material";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import SingleNewsPage from "../singleNewsPage/SingleNewsPage";
+
 export enum Paths {
   MAIN = "/",
   NEWS_PAGE = "/:id",
 }
-function App() {
+
+const App = () => {
   return (
     <Router>
       <Box
@@ -26,6 +28,6 @@ function App() {
       </Box>
     </Router>
   );
-}
+};
 
 export default App;

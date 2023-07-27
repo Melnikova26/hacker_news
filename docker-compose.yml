@@ -1,16 +1,12 @@
 services:
   frontend:
-    build:
-      context: ./frontend
-      dockerfile: dockerfile
+    build: ./frontend
     ports:
       - "3000:80"
     env_file:
       - ./frontend/.env
   server:
-    build:
-      context: ./server
-      dockerfile: dockerfile
+    build: ./server
     ports:
       - "8000:8000"
     depends_on:

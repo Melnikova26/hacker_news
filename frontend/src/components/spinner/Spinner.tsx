@@ -1,4 +1,5 @@
 import { CircularProgress, Box } from "@mui/material";
+
 function Spinner() {
   return (
     <Box

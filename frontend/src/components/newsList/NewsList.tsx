@@ -1,17 +1,20 @@
 import { useEffect, useState } from "react";
 import { List, Container, Button } from "@mui/material";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
+
 import NewsItem from "../newsItem/NewsItem";
 import { useAppSelector, useAppDispatch } from "../../store/hooksTyped";
 import { fetchNewsItems } from "../../store/reducer";
 import Spinner from "../spinner/Spinner";
+
 const NewsElement = NewsItem as unknown as React.JSXElementConstructor<{
   id: number | string;
 }>;
 
 export default function NewsList() {
-  const loading = useAppSelector((state) => state.newsIds.newsLoadingStatus);
   const [shouldUpdate, setShouldUpdate] = useState(false);
+
+  const loading = useAppSelector((state) => state.newsIds.newsLoadingStatus);
   const newsItems = useAppSelector((state) => state.newsIds.newsItems);
 
   const dispatch = useAppDispatch();
@@ -21,10 +24,12 @@ export default function NewsList() {
       dispatch(fetchNewsItems());
       setShouldUpdate(false);
     }
+
     const IntervalId = setInterval(() => {
       setShouldUpdate(true);
       setShouldUpdate(false);
     }, 60000);
+
     return () => clearInterval(IntervalId);
   }, [dispatch, shouldUpdate]);
 

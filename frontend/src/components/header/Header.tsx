@@ -1,10 +1,12 @@
 import { Link } from "react-router-dom";
 import { AppBar, Toolbar, Typography } from "@mui/material";
 import styled from "@mui/styled-engine-sc";
+
 const StyledLink = styled(Link)`
   color: #fff;
   text-decoration: none;
 `;
+
 const Header = () => {
   return (
     <AppBar

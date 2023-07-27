@@ -9,15 +9,20 @@ import getTime from "../../utils/timeModify";
 import { useAppSelector, useAppDispatch } from "../../store/hooksTyped";
 import { fetchNewsItems } from "../../store/reducer";
 import Spinner from "../spinner/Spinner";
+
 function SingleNewsPage() {
   const [shouldUpdate, setShouldUpdate] = useState(false);
+
   const { id } = useParams<string>();
+
   const newId = +id!;
+
   const loading = useAppSelector((state) => state.newsIds.newsLoadingStatus);
   const newsItem = useAppSelector((state) =>
     state.newsIds.newsItems?.find((item) => item.id == newId)
   );
   const dispatch = useAppDispatch();
+
   useEffect(() => {
     dispatch(fetchNewsItems());
     const IntervalId = setInterval(() => {
@@ -31,16 +36,18 @@ function SingleNewsPage() {
       dispatch(fetchNewsItems());
       setShouldUpdate(false);
     }
-  }, [dispatch, setShouldUpdate]);
+  }, [dispatch, shouldUpdate]);
 
   const { title, by, time, url, descendants, kids } = newsItem ?? {};
 
   const resultTime = getTime(time!);
+
   if (loading === "loading") {
     return <Spinner />;
   } else if (loading === "error") {
     return <h5>Ошибка загрузки</h5>;
   }
+
   return (
     <Container sx={{ pt: 5, backgroundColor: "#fff" }}>
       <Box display="flex" justifyContent="space-between">
