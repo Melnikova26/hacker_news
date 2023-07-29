@@ -1,36 +1,24 @@
-# Этап 1: Компиляция TypeScript файлов
 FROM node:alpine as builder
 
-# Устанавливаем директорию приложения в контейнере
 WORKDIR /app
 
-# Копируем package.json и package-lock.json в контейнер
 COPY package*.json ./
 
-# Устанавливаем зависимости
 RUN npm install
 
-# Копируем все остальные файлы приложения в контейнер
 COPY . .
 
-# Компилируем TypeScript файлы
 RUN npm run build
 
-# Этап 2: Запуск сервера
 FROM node:alpine
 
-# Устанавливаем директорию приложения в контейнере
 WORKDIR /app
 
-# Копируем только скомпилированные JavaScript файлы и package.json, package-lock.json
 COPY --from=builder /app/dist ./dist
 COPY package*.json ./
 
-# Устанавливаем только зависимости для продакшн
 RUN npm install --production
 
-# Открываем порт, на котором ваше приложение слушает запросы
 EXPOSE 8000
 
-# Команда для запуска вашего серверного приложения
 CMD [ "node", "dist/index.js" ]

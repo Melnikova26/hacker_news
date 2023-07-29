@@ -7,3 +7,12 @@ services:
       - ./frontend/.env
   server:
     build: ./server
+    ports:
+      - "8000:8000"
+  nginx:
+    build: ./.nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - frontend
+      - server
