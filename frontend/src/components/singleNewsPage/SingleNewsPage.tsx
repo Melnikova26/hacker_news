@@ -10,12 +10,12 @@ import { useAppSelector, useAppDispatch } from "../../store/hooksTyped";
 import { fetchNewsItems } from "../../store/reducer";
 import Spinner from "../spinner/Spinner";
 
-function SingleNewsPage() {
+const SingleNewsPage: React.FC = () => {
   const [shouldUpdate, setShouldUpdate] = useState(false);
 
   const { id } = useParams<string>();
 
-  const newId = +id!;
+  const newId = id ? +id : null;
 
   const loading = useAppSelector((state) => state.newsIds.newsLoadingStatus);
   const newsItem = useAppSelector((state) =>
@@ -105,5 +105,5 @@ function SingleNewsPage() {
         : null}
     </Container>
   );
-}
+};
 export default SingleNewsPage;

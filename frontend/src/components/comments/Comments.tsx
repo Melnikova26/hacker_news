@@ -27,7 +27,7 @@ const RotateIcon = styled(ExpandLessIcon)<{ expand: string }>`
     expand === "true" ? "rotate(180deg)" : "rotate(0)"};
 `;
 
-const Comments = ({ id, getTime }: CommentIDProp) => {
+const Comments: React.FC<CommentIDProp> = ({ id, getTime }) => {
   const [isExpand, setIsExpand] = useState<boolean>(false);
 
   const commentItem = useAppSelector((state) =>
@@ -45,7 +45,8 @@ const Comments = ({ id, getTime }: CommentIDProp) => {
 
   const { text, by, time, kids } = commentItem ?? {};
 
-  const resultTime = getTime(time!);
+  const resultTime = time ? getTime(time) : 0;
+
   return (
     <CommentContainer>
       <CustomButton

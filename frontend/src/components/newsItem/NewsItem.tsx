@@ -16,7 +16,7 @@ interface NewsIDProp {
   id: number;
 }
 
-const NewsItem = ({ id }: NewsIDProp) => {
+const NewsItem: React.FC<NewsIDProp> = ({ id }) => {
   const newsItem = useAppSelector((state) =>
     state.newsIds.newsItems?.find((item) => item.id == id)
   );
@@ -25,7 +25,10 @@ const NewsItem = ({ id }: NewsIDProp) => {
 
   const resultTime = getTime(time!);
 
-  return url ? (
+  if (!url) {
+    return null;
+  }
+  return (
     <>
       <ListItem>
         <Typography variant="h6" component="div" sx={{ fontWeight: "700" }}>
@@ -37,6 +40,6 @@ const NewsItem = ({ id }: NewsIDProp) => {
       </ListItem>
       <Divider />
     </>
-  ) : null;
+  );
 };
 export default NewsItem;

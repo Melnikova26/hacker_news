@@ -7,7 +7,7 @@ const StyledLink = styled(Link)`
   text-decoration: none;
 `;
 
-const Header = () => {
+const Header: React.FC = () => {
   return (
     <AppBar
       sx={{ backgroundColor: "#FFC173", zIndex: "1", position: "static" }}

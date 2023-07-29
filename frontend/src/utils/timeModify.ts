@@ -1,4 +1,3 @@
-import { useCallback } from "react";
 const getTime = (initialTime: number): string => {
   const currentTime: Date = new Date();
   const passedTime: number = currentTime.getTime() - initialTime * 1000;

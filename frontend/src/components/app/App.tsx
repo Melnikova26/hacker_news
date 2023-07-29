@@ -9,7 +9,7 @@ export enum Paths {
   NEWS_PAGE = "/:id",
 }
 
-const App = () => {
+const App: React.FC = () => {
   return (
     <Router>
       <Box

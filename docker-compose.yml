@@ -7,7 +7,3 @@ services:
       - ./frontend/.env
   server:
     build: ./server
-    ports:
-      - "8000:8000"
-    depends_on:
-      - frontend

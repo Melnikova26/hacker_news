@@ -7,11 +7,7 @@ import { useAppSelector, useAppDispatch } from "../../store/hooksTyped";
 import { fetchNewsItems } from "../../store/reducer";
 import Spinner from "../spinner/Spinner";
 
-const NewsElement = NewsItem as unknown as React.JSXElementConstructor<{
-  id: number | string;
-}>;
-
-export default function NewsList() {
+const NewsList: React.FC = () => {
   const [shouldUpdate, setShouldUpdate] = useState(false);
 
   const loading = useAppSelector((state) => state.newsIds.newsLoadingStatus);
@@ -68,9 +64,10 @@ export default function NewsList() {
         aria-label="news folder"
       >
         {newsItems.map((item) => (
-          <NewsElement key={item.id} id={item.id} />
+          <NewsItem key={item.id} id={item.id} />
         ))}
       </List>
     </Container>
   );
-}
+};
+export default NewsList;
