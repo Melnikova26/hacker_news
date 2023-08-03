@@ -19,7 +19,7 @@ app.get("/ping", (req: Request, res: Response) => {
   res.send("Pong");
 });
 
-app.use("/api", storiesRouter);
+app.use("/", storiesRouter);
 
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
