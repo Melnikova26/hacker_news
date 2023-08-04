@@ -1,6 +1,6 @@
-/frontend/node_modules
-/server/node_modules
+node_modules
+node_modules
 
 # production
-/frontend/build
-/server/dist
+build
+dist
